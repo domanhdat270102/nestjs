@@ -267,16 +267,16 @@
 //         createFestival.event = await Promise.all(eventUploadPromises);
 //       }
 
-//       if (files.donors && files.donors.length > 0) {
-//       const donorsUploadPromises = files.donors.map(async (donor) => {
-//         const result = await this.cloudinaryService.uploadImage(
-//           donor.buffer,
-//           donor.originalname,
-//         );
-//         return result.secure_url;
-//       });
-//       createFestival.donors = await Promise.all(donorsUploadPromises);
-//     }
+    //   if (files.donors && files.donors.length > 0) {
+    //   const donorsUploadPromises = files.donors.map(async (donor) => {
+    //     const result = await this.cloudinaryService.uploadImage(
+    //       donor.buffer,
+    //       donor.originalname,
+    //     );
+    //     return result.secure_url;
+    //   });
+    //   createFestival.donors = await Promise.all(donorsUploadPromises);
+    // }
 
 //     if (files.artist && files.artist.length > 0) {
 
@@ -431,18 +431,20 @@ export class AdminController {
         // Extract information from filename
         const fileNameParts = eventFile.originalname.split('.');
         const name = fileNameParts[0]; // Extracted name from filename
+        const slug = name.toLowerCase().replace(/\s+/g, '_');
     
         // Upload event file to Cloudinary and get the secure URL
         const result = await this.cloudinaryService.uploadImage(
           eventFile.buffer,
           eventFile.originalname,
         );
-    
+
+        
         // Create an event object and set its properties
         const eventObject = new EventDto();
         eventObject.name = name; // Set name from the extracted filename
         eventObject.pictures = [result.secure_url]; // Set pictures from the uploaded file
-    
+        eventObject.slug = slug;
         return eventObject;
       });
     
@@ -479,7 +481,16 @@ export class AdminController {
     
     
     
-    
+    if (files.donors && files.donors.length > 0) {
+      const donorsUploadPromises = files.donors.map(async (donor) => {
+        const result = await this.cloudinaryService.uploadImage(
+          donor.buffer,
+          donor.originalname,
+        );
+        return result.secure_url;
+      });
+      createFestival.donors = await Promise.all(donorsUploadPromises);
+    }
 
     if (files.artist && files.artist.length > 0) {
 

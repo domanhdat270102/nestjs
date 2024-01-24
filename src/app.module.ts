@@ -10,6 +10,7 @@ import { UploadsModule } from './uploads/uploads.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { MailModule } from './mailer/mail.module';
 import { AdminModule } from './admin/admin.module';
+import { EventModule } from './event/event.module';
 
 
 @Module({
@@ -41,6 +42,7 @@ import { AdminModule } from './admin/admin.module';
     UploadsModule,
     MailModule,
     AdminModule,
+    EventModule,
   ],
 })
 export class AppModule {}

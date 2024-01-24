@@ -26,19 +26,20 @@ export class EventDto {
   name?: string;
 
   pictures?: string[];
+
+  slug?: string;
 }
 import { IsArray, IsDateString, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateFestivalDto {
   // @IsString()
-  // @IsNotEmpty()
+  
   banner: string;
 
-  // @IsString()
-  // @IsNotEmpty()
+  @IsString()
+  @IsNotEmpty()
   description: string;
 
-  // @IsString()
   video: string;
 
 
