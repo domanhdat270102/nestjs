@@ -21,4 +21,8 @@ export class Task {
   @ManyToOne((_type) => User, (user) => user.task, { eager: false })
   // @Exclude({toPlainOnly: true})
   user: User;
+
+  @Column()
+  // @Exclude()
+  created_at: Date
 }

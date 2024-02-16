@@ -1,5 +1,6 @@
 /* eslint-disable */
-import {IsNotEmpty} from 'class-validator'
+import {IsEnum, IsNotEmpty} from 'class-validator'
+import { TaskStatus } from '../task-status.enum';
 
 export class CreateTaskDto {
     @IsNotEmpty()
@@ -7,4 +8,8 @@ export class CreateTaskDto {
 
     @IsNotEmpty()
     description: string;
+
+    @IsEnum(TaskStatus)
+    status?: TaskStatus
+
 }

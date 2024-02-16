@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { TaskStatus } from './task-status.enum';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -17,7 +17,7 @@ import { ConfigService } from '@nestjs/config';
 export class TasksController {
   private logger = new Logger('TasksController')
   constructor(private tasksService: TasksService) {}
-
+  
   @Get()
   getTasks(
     @Query() filterDto: GetTasksFilterDto,
@@ -27,6 +27,18 @@ export class TasksController {
     return this.tasksService.getTasks(filterDto, user)
   }
 
+  @Get('/all')
+  getAllTasks(
+    // @Query() filterDto: GetTasksFilterDto,
+    @GetUser() user: User
+  ): Promise<Task[]> {
+    if (!user || !user.role || user.role !== 'admin') {
+      throw new UnauthorizedException(
+        'You do not have permission to access this resource',
+      );
+    }
+    return this.tasksService.getAllTasks()
+  }
 
   @Get('/:id')
   getTaskById(@Param('id') id: string, @GetUser() user: User): Promise<Task> {

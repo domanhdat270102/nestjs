@@ -22,7 +22,7 @@ export class CloudinaryService {
                     console.error('Error uploading to Cloudinary:', error);
                     reject(error);
                 } else {
-                    console.log('Upload result:', result);
+                    // console.log('Upload result:', result);
                     resolve(result);
                 }
             });

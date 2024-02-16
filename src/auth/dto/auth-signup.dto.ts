@@ -2,7 +2,7 @@
 import { IsEnum, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 import { RoleStatus } from '../role-status.enum';
 
-export class AuthCredentialsDto {
+export class AuthSignUpCredentialsDto {
   @IsString()
   @MinLength(4)
   @MaxLength(20)
@@ -16,6 +16,6 @@ export class AuthCredentialsDto {
   })
   password: string;
 
-  // @IsEnum(RoleStatus)
-  // role: RoleStatus
+  @IsEnum(RoleStatus)
+  role: RoleStatus
 }

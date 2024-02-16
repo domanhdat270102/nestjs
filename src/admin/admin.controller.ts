@@ -489,7 +489,9 @@ export class AdminController {
         );
         return result.secure_url;
       });
-      createFestival.donors = await Promise.all(donorsUploadPromises);
+      // createFestival.donors = await Promise.all(donorsUploadPromises);
+      createFestival.donors = createFestival.donors || [];
+      createFestival.donors.push(...(await Promise.all(donorsUploadPromises)));
     }
 
     if (files.artist && files.artist.length > 0) {

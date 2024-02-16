@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TasksModule } from './tasks/tasks.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,11 +8,11 @@ import { configValidationSchema } from './config.schema';
 import { PersonModule } from './person/person.module';
 import { UploadsModule } from './uploads/uploads.module';
 import { MulterModule } from '@nestjs/platform-express';
-import { MailModule } from './mailer/mail.module';
 import { AdminModule } from './admin/admin.module';
 import { EventModule } from './event/event.module';
-
-
+import { EmailModule } from './email/email.module';
+import { OtpModule } from './otp/otp.module';
+import * as cookieParser from 'cookie-parser';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -40,9 +40,10 @@ import { EventModule } from './event/event.module';
     AuthModule,
     PersonModule,
     UploadsModule,
-    MailModule,
     AdminModule,
     EventModule,
+    EmailModule,
+    OtpModule,
   ],
 })
 export class AppModule {}

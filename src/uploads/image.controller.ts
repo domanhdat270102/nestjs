@@ -52,10 +52,8 @@ export class ImageController {
     @Post('upload')
     @UseInterceptors(FileInterceptor('image'))
     async uploadFile(@UploadedFile() file: Express.Multer.File) {
-        console.log('File path:', file.buffer); // Sử dụng file.buffer thay vì file.path
         try {
             const result = await this.cloudinaryService.uploadImage(file.buffer, file.originalname);
-            console.log('result',result);
             
             return result;
         } catch (error) {
@@ -67,8 +65,6 @@ export class ImageController {
     @Post('uploads')
     @UseInterceptors(FilesInterceptor('images', 3))
     async uploadFiles(@UploadedFiles() files: Express.Multer.File[]) {
-        console.log('Number of files:', files.length);
-
         try {
             const uploadPromises = files.map(async (file) => {
                 const result = await this.cloudinaryService.uploadImage(file.buffer, file.originalname);

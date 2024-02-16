@@ -51,13 +51,50 @@ export class TasksRepository extends Repository<Task> {
     return tasks;
   }
 
+  async getAllTasks(filterDto: GetTasksFilterDto): Promise<Task[]> {
+    const { search, status, sortBy, page, limit } = filterDto;
+    const query = this.createQueryBuilder('task');
+    if (status) {
+      query.andWhere('task.status = :status', { status });
+    }
+
+    if (search) {
+      query.andWhere(
+        '(LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) LIKE LOWER(:search))',
+        {
+          search: `%${search}%`,
+        },
+      );
+    }
+    if (sortBy) {
+      const [sortField, sortOrder] = sortBy.split(':');
+      
+      if (['ASC', 'DESC'].includes(sortOrder.toUpperCase())) {
+        query.orderBy(`task.${sortField}`, sortOrder.toUpperCase() as 'ASC' | 'DESC');
+      } else {
+        throw new BadRequestException('Invalid sortOrder value. Use "ASC" or "DESC".');
+      }
+    } else {
+      // Default sorting by createdAt in descending order
+      query.orderBy('task.title', 'ASC');
+    }
+
+    if (page && limit) {
+      const skip = (+page - 1) * +limit;
+      query.skip(skip).take(+limit);
+    }
+    const tasks = await query.getMany();
+    return tasks;
+  }
+
   async createTask(createTaskDto: CreateTaskDto, user: User): Promise<Task> {
-    const { title, description } = createTaskDto;
+    const { title, description, status } = createTaskDto;
 
     const task = this.create({
       title,
       description,
-      status: TaskStatus.OPEN,
+      status: status || TaskStatus.OPEN,
+      created_at: new Date(),
       user,
     });
 
